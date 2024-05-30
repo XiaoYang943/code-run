@@ -205,24 +205,24 @@ import XYZ from 'ol/source/XYZ.js';
 // 导出createApp是必须的
 const msg = ref('Hello World!' + moment().format('YYYY'))
 onMounted(() => {
-const map = new Map({
-  target: 'map',
-  layers: [
-    new TileLayer({
-   source: new XYZ({
-   url: 'http://t4.tianditu.com/DataServer?T=vec_w&tk=a9bbec302f2213e1fe33e9775187d021&x={x}&y={y}&l={z}',
-   })
-    })
-    })
-  ],
-  view: new View({
-    center: [0, 0],
-    zoom: 2
-  })
-});
-
+    init();
 })
-
+const init = () => {
+    const map = new Map({
+    target: 'map',
+    layers: [
+        new TileLayer({
+          source: new XYZ({
+            url: 'http://t4.tianditu.com/DataServer?T=vec_w&tk=a9bbec302f2213e1fe33e9775187d021&x={x}&y={y}&l={z}',
+          })
+        })
+    ],
+    view: new View({
+      center: [0, 0],
+      zoom: 2
+    })
+  });
+}
 </script>
 
 <style lang="less">
