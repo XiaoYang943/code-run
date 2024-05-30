@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+  <title>预览</title>
+  <style type="text/css">
+    h1 {
+      color: red;
+    }
+
+    .map {
+      width: 400px;
+      height: 400px;
+    }
+  </style>
+
+  <script src="/code-run/base/index.js"></script>
+  <script src="/code-run/console/index.js"></script>
+
+</head>
+
+<body>
+
+  <div id="app"></div>
+
+
+  <script type="importmap">
+          {"imports":{"vue":"https://unpkg.com/vue@3.3.4/dist/vue.esm-browser.js"}}
+        </script>
+  <script type="module">
+
+    import { toDisplayString as _toDisplayString, createElementVNode as _createElementVNode, vModelText as _vModelText, withDirectives as _withDirectives, Fragment as _Fragment, openBlock as _openBlock, createElementBlock as _createElementBlock } from "vue";
+
+    const _hoisted_1 = /*#__PURE__*/_createElementVNode("div", {
+      id: "map",
+      class: "map"
+    }, null, -1
+      /* HOISTED */
+    );
+    import { ref, createApp, onMounted } from 'vue';
+    import moment from "https://unpkg.com/moment?module";
+    import Map from "https://unpkg.com/ol/Map.js?module";
+    import View from "https://unpkg.com/ol/View.js?module";
+    import TileLayer from "https://unpkg.com/ol/layer/Tile.js?module";
+    import OSM from "https://unpkg.com/ol/source/OSM.js?module"; // 导出createApp是必须的
+
+    import { ref, createApp, onMounted } from 'vue';
+    import moment from "https://unpkg.com/moment?module";
+    import Map from 'https://cdn.skypack.dev/ol/Map.js';
+    import View from 'https://cdn.skypack.dev/ol/View.js';
+    import TileLayer from 'https://cdn.skypack.dev/ol/layer/Tile.js';
+    import OSM from 'https://cdn.skypack.dev/ol/source/OSM.js'; // 导出createApp是必须的
+
+    createApp({
+      setup(__props) {
+        const msg = ref('Hello World!' + moment().format('YYYY'));
+        onMounted(() => {
+          const map = new Map({
+            target: 'map',
+            layers: [new TileLayer({
+              source: new OSM()
+            })],
+            view: new View({
+              center: [0, 0],
+              zoom: 2
+            })
+          });
+        });
+        return (_ctx, _cache) => {
+          return _openBlock(), _createElementBlock(_Fragment, null, [_createElementVNode("h1", null, _toDisplayString(msg.value), 1
+            /* TEXT */
+          ), _withDirectives(_createElementVNode("input", {
+            "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => msg.value = $event)
+          }, null, 512
+            /* NEED_PATCH */
+          ), [[_vModelText, msg.value]]), _hoisted_1], 64
+            /* STABLE_FRAGMENT */
+          );
+        };
+      },
+
+      template: "\n    <h1>{{ msg }}</h1>\n    <input v-model=\"msg\">\n    <div id=\"map\" class=\"map\"></div>\n"
+    }).mount("#app");
+
+    window.parent.postMessage({
+      type: 'successRun'
+    })
+
+  </script>
+
+</body>
+
+</html>

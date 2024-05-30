@@ -24,7 +24,15 @@ const transformJsImport = (jsStr, importMap) => {
 
 // 检查是否是裸导入
 const isBareImport = source => {
-  return !(/^https?:\/\//.test(source) || /^(\/|\.\/|\.\.\/)/.test(source))
+  let a = /^https?:\/\//.test(source)
+  let b = /^(\/|\.\/|\.\.\/)/.test(source)
+  let result = !(a || b)
+  console.log("source",source)
+  console.log("a",a)
+  console.log("b",b)
+  console.log("result",result)
+
+  return result
 }
 
 // 修改import from语句

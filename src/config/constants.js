@@ -460,7 +460,12 @@ export const defaultViewThemeConfig = {
 // ES模块CDN
 export const esModuleCdnUrl = 'https://unpkg.com/'
 export const handleEsModuleCdnUrl = (module, useModule = true) => {
-  return `${esModuleCdnUrl}${module}${useModule ? '?module' : ''}`
+  const useSkypack = true;
+  if(useSkypack) {
+    return 'https://cdn.skypack.dev/' + module  // TODO-hyy 把是否使用skypack代理，做个设置项暴露给用户
+  } else {
+    return `${esModuleCdnUrl}${module}${useModule ? '?module' : ''}`
+  }
 }
 
 // 嵌入模式的编辑器tab列表

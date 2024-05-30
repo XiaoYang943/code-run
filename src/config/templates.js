@@ -192,10 +192,15 @@ import { ref, createApp,onMounted } from 'vue'
 import moment from 'moment'
 
 
-import Map from 'https://cdn.skypack.dev/ol/Map.js';
-import View from 'https://cdn.skypack.dev/ol/View.js';
-import TileLayer from 'https://cdn.skypack.dev/ol/layer/Tile.js';
-import OSM from 'https://cdn.skypack.dev/ol/source/OSM.js';
+// import Map from 'https://cdn.skypack.dev/ol/Map.js';
+// import View from 'https://cdn.skypack.dev/ol/View.js';
+// import TileLayer from 'https://cdn.skypack.dev/ol/layer/Tile.js';
+// import XYZ from 'https://cdn.skypack.dev/ol/source/XYZ.js';
+
+import Map from 'ol/Map.js';
+import View from 'ol/View.js';
+import TileLayer from 'ol/layer/Tile.js';
+import XYZ from 'ol/source/XYZ.js';
 
 // 导出createApp是必须的
 const msg = ref('Hello World!' + moment().format('YYYY'))
@@ -204,7 +209,10 @@ const map = new Map({
   target: 'map',
   layers: [
     new TileLayer({
-      source: new OSM()
+   source: new XYZ({
+   url: 'http://t4.tianditu.com/DataServer?T=vec_w&tk=a9bbec302f2213e1fe33e9775187d021&x={x}&y={y}&l={z}',
+   })
+    })
     })
   ],
   view: new View({

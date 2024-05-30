@@ -197,7 +197,7 @@ const scaleTypeChange = data => {
 }
 
 const reRunCode = () => {
-  proxy.$eventEmitter.emit('run')
+  proxy.$eventEmitter.emit('runCode')
 }
 
 const toCodeRun = () => {

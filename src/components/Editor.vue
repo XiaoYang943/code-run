@@ -260,7 +260,7 @@ const useRunCode = ({ store, proxy }) => {
   // 发送运行代码的通知
   const runCode = () => {
     if (props.notRunCode) return
-    proxy.$eventEmitter.emit('run')
+    proxy.$eventEmitter.emit('runCode')
     if (layout.value === 'newWindowPreview') {
       proxy.$eventEmitter.emit('preview_window_run')
     }

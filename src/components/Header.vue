@@ -324,7 +324,7 @@ const useTemplate = ({ layout, store, proxy }) => {
 // 运行
 const useRun = ({ proxy, layout }) => {
   const run = () => {
-    proxy.$eventEmitter.emit('run')
+    proxy.$eventEmitter.emit('runCode')
     if (layout.value === 'newWindowPreview') {
       proxy.$eventEmitter.emit('preview_window_run')
     }

@@ -277,6 +277,7 @@ const useRun = ({
   })
   // 运行
   const runStartTime = ref(0)
+  // TODO-hyy 运行
   const run = async () => {
     try {
       runStartTime.value = Date.now()
@@ -289,14 +290,12 @@ const useRun = ({
       let _cssResourcesPlus = []
       let compiledData = null
       // vue单文件
-      if (
-        layout.value === 'vue' ||
-        (layout.value === 'newWindowPreview' && vueContent.value)
-      ) {
+      if (layout.value === 'vue' || (layout.value === 'newWindowPreview' && vueContent.value)) {
+        // 把vue文件编译为js html css
         compiledData = await compileVue(
-          vueLanguage.value,
-          vueContent.value,
-          importMap.value.imports || {}
+          vueLanguage.value,  // vue版本 .eg "vue3"
+          vueContent.value, // vue组件内容字符串
+          importMap.value.imports || {} // import-map .eg "https://unpkg.com/vue@3.3.4/dist/vue.esm-browser.js" (是在`添加Import Map`中添加的)
         )
         if (compiledData) {
           // 自动引入vue资源
@@ -333,6 +332,7 @@ const useRun = ({
           }
         })
       )
+      // 组装为html
       let doc = createHtml(
         compiledData.html,
         compiledData.js.js,
@@ -344,7 +344,7 @@ const useRun = ({
         compiledData.js.useImport
       )
       store.commit('setPreviewDoc', doc)
-      srcdoc.value = doc
+      srcdoc.value = doc // 设置iframe内容
       isNewWindowPreview.value = false
     } catch (error) {
       console.log(error)
@@ -364,10 +364,10 @@ const useRun = ({
     }
   }
 
-  proxy.$eventEmitter.on('run', run)
+  proxy.$eventEmitter.on('runCode', run)
 
   onBeforeUnmount(() => {
-    proxy.$eventEmitter.off('run', run)
+    proxy.$eventEmitter.off('runCode', run)
   })
 
   // 全能调试配置修改后重新运行

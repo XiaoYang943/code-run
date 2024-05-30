@@ -8,7 +8,7 @@ import { zlibSync, strToU8, strFromU8, unzlibSync } from 'fflate'
  * javascript comment
  * @Author: 王林25
  * @Date: 2021-05-07 10:32:20
- * @Desc: 拼接html
+ * @Desc: 组装html的head和body，返回整个html
  */
 export const assembleHtml = (head, body) => {
   return `<!DOCTYPE html>
