@@ -2,6 +2,7 @@ import elementPlusIcon from '../assets/templateIcons/element-plus.svg'
 import vueIcon from '../assets/templateIcons/vue.png'
 import reactIcon from '../assets/templateIcons/react.svg'
 import elementIcon from '../assets/templateIcons/element.svg'
+import openlayersIcon from '../assets/templateIcons/element.svg'
 import echartsIcon from '../assets/templateIcons/echarts.png'
 import g2Icon from '../assets/templateIcons/g2.png'
 import angularIcon from '../assets/templateIcons/angular.png'
@@ -179,24 +180,53 @@ const vue3SFC = {
     },
     VUE: {
       language: 'vue3',
-      content: `<template>
+      content: `
+      <template>
     <h1>{{ msg }}</h1>
     <input v-model="msg">
+    <div id="map" class="map"></div>
 </template>
 
 <script setup>
-import { ref, createApp } from 'vue'
+import { ref, createApp,onMounted } from 'vue'
 import moment from 'moment'
+
+
+import Map from 'https://cdn.skypack.dev/ol/Map.js';
+import View from 'https://cdn.skypack.dev/ol/View.js';
+import TileLayer from 'https://cdn.skypack.dev/ol/layer/Tile.js';
+import OSM from 'https://cdn.skypack.dev/ol/source/OSM.js';
+
 // 导出createApp是必须的
 const msg = ref('Hello World!' + moment().format('YYYY'))
+onMounted(() => {
+const map = new Map({
+  target: 'map',
+  layers: [
+    new TileLayer({
+      source: new OSM()
+    })
+  ],
+  view: new View({
+    center: [0, 0],
+    zoom: 2
+  })
+});
+
+})
+
 </script>
 
 <style lang="less">
 h1 {
     color: red;
 }
+.map {
+        width: 400px;
+        height: 400px;
+      }
 </style>  
-            `,
+      `,
       resources: []
     }
   }
@@ -549,6 +579,74 @@ data: function() {
       resources: []
     }
   }
+}
+
+const openLayers = {
+  name: 'OpenLayers',
+  icon: openlayersIcon,
+  code: {
+    HTML: {
+      language: 'html',
+      content: `<div id="map" class="map"></div>`,
+      resources: []
+    },
+    CSS: {
+      language: 'css',
+      content: `.map {
+height: 400px;
+width: 100%;
+}`,
+      resources: [{
+        name: 'OpenLayers',
+        url: 'https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css'
+      }]
+    },
+    JS: {
+      language: 'javascript',
+//       content: `var map = new ol.Map({
+// target: 'map',
+// layers: [
+//     new ol.layer.Tile({
+//     source: new ol.source.OSM()
+//     })
+// ],
+// view: new ol.View({
+//     center: ol.proj.fromLonLat([37.41, 8.82]),
+//     zoom: 4
+// })
+// });`,
+      content:`
+import Map from 'ol/Map.js';
+import TileLayer from 'ol/layer/Tile.js';
+import View from 'ol/View.js';
+import {OSM} from 'ol/source.js';
+console.log("",Map)
+const map = new Map({
+  layers: [
+    new TileLayer({
+      source: new OSM(),
+    })
+  ],
+  target: 'map',
+  view: new View({
+    center: [0, 0],
+    zoom: 1,
+  }),
+});`,
+      importMap: `
+{
+    "imports": {
+        "ol": "https://cdn.jsdelivr.net/npm/ol@9.1.0/+esm"
+    }
+}
+            `,
+      resources: [{
+        name: 'OpenLayers',
+        // url: 'https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js'
+        url:'https://unpkg.com/ol@8.1.0/dist/ol.js'
+      }]
+    },
+  },
 }
 
 const eCharts = {
@@ -910,6 +1008,7 @@ const templateList = [
   react,
   elementPlus,
   elementUi,
+  openLayers,
   eCharts,
   g2,
   angular,
@@ -928,6 +1027,7 @@ const templateMap = {
   react,
   elementPlus,
   elementUi,
+  openLayers,
   eCharts,
   g2,
   angular,
