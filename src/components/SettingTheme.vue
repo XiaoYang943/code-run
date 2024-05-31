@@ -67,13 +67,14 @@
 </template>
 
 <script setup>
-import { watch, ref } from 'vue'
-import { useStore } from 'vuex'
-import { codeThemeList } from '@/config/codeThemeList'
-import { ElSelect, ElOption, ElSwitch, ElMessage, ElInput } from 'element-plus'
-import { codeFontSizeList } from '@/config/constants'
+import {codeThemeList} from '@/config/codeThemeList'
+import {codeFontSizeList} from '@/config/constants'
+import {useTheme} from "@/hooks/useTheme.js";
+import {splitHumpStr} from '@/utils'
+import {ElInput, ElMessage, ElOption, ElSelect, ElSwitch} from 'element-plus'
 import * as vscodeThemeToMonacoThemeWeb from 'vscode-theme-to-monaco-theme-web'
-import { splitHumpStr } from '@/utils'
+import {ref, watch} from 'vue'
+import {useStore} from 'vuex'
 
 // hooks定义部分
 
@@ -84,31 +85,6 @@ const useInit = () => {
   return {
     store,
     config: store.state.editData.config
-  }
-}
-
-// 处理主题
-const useTheme = ({ store, config }) => {
-  const codeTheme = ref('')
-  codeTheme.value = config.codeTheme
-
-  watch(
-    () => {
-      return config.codeTheme
-    },
-    value => {
-      codeTheme.value = value
-    }
-  )
-
-  // 切换代码主题
-  const codeThemeChange = async e => {
-    store.commit('setCodeTheme', e)
-  }
-
-  return {
-    codeTheme,
-    codeThemeChange
   }
 }
 

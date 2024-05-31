@@ -27,11 +27,10 @@ const isBareImport = source => {
   let a = /^https?:\/\//.test(source)
   let b = /^(\/|\.\/|\.\.\/)/.test(source)
   let result = !(a || b)
-  console.log("source",source)
-  console.log("a",a)
-  console.log("b",b)
-  console.log("result",result)
-
+  // console.log("source",source)
+  // console.log("a",a)
+  // console.log("b",b)
+  // console.log("result",result)
   return result
 }
 

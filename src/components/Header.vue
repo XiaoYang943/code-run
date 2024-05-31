@@ -196,35 +196,29 @@
 </template>
 
 <script setup>
+import {useLogin} from "@/hooks/useLogin.js";
+import {useTemplate} from "@/hooks/useTemplate.js";
+import exportZip from '@/utils/exportZip'
+import {request} from '@/utils/octokit'
+import dayjs from 'dayjs'
 import {
-  getCurrentInstance,
-  ref,
-  computed,
-  onBeforeUnmount,
-  nextTick,
-  shallowRef
-} from 'vue'
-import templateList from '@/config/templates'
-import { useStore } from 'vuex'
+  ElButton,
+  ElDialog,
+  ElDrawer,
+  ElInput,
+  ElMessage,
+  ElPagination,
+  ElTable,
+  ElTableColumn,
+  ElTabPane,
+  ElTabs
+} from 'element-plus'
+import {computed, getCurrentInstance, onBeforeUnmount, ref, shallowRef} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
+import {useStore} from 'vuex'
 import Setting from './Setting.vue'
 import SettingLayout from './SettingLayout.vue'
 import SettingTheme from './SettingTheme.vue'
-import exportZip from '@/utils/exportZip'
-import {
-  ElMessage,
-  ElButton,
-  ElDialog,
-  ElInput,
-  ElTabs,
-  ElTabPane,
-  ElDrawer,
-  ElTable,
-  ElTableColumn,
-  ElPagination
-} from 'element-plus'
-import { request } from '@/utils/octokit'
-import dayjs from 'dayjs'
-import { useRouter, useRoute } from 'vue-router'
 import Share from './Share.vue'
 
 // hooks定义部分
@@ -277,47 +271,6 @@ const useExport = ({ toggleToolsList, store }) => {
     exportName,
     exportZipFile,
     confirmExport
-  }
-}
-
-// 模板选择
-const useTemplate = ({ layout, store, proxy }) => {
-  const templateDialogVisible = ref(false)
-  const templateData = ref(templateList)
-
-  // 打开选择模板弹窗
-  const openTemplate = () => {
-    templateDialogVisible.value = true
-  }
-
-  // 检查布局是否和模板对应
-  const checkLayout = data => {
-    if (data.isVueSFC) {
-      if (layout.value !== 'vue') {
-        store.commit('setLayout', 'vue')
-      }
-    } else {
-      if (layout.value === 'vue') {
-        store.commit('setLayout', 'default')
-      }
-    }
-  }
-
-  // 选择某个模板
-  const selectTemplate = data => {
-    checkLayout(data)
-    nextTick(() => {
-      store.commit('setCode', JSON.parse(JSON.stringify(data.code)))
-      proxy.$eventEmitter.emit('reset_code')
-      templateDialogVisible.value = false
-    })
-  }
-
-  return {
-    templateDialogVisible,
-    templateData,
-    openTemplate,
-    selectTemplate
   }
 }
 
@@ -392,57 +345,6 @@ const useDropDownMenu = () => {
     toggleToolsList,
     showMoreList,
     toggleMoreList
-  }
-}
-
-// 登录退出
-const useLogin = ({ store, router, route }) => {
-  const githubTokenInputDialogVisible = ref(false)
-  const githubTokenValue = ref('')
-  // github token
-  const githubToken = computed(() => {
-    return store.state.githubToken
-  })
-  // 登录
-  const login = () => {
-    githubTokenInputDialogVisible.value = true
-  }
-  // 退出登录
-  const logout = () => {
-    store.dispatch('saveGithubToken', null)
-    router.replace({
-      name: 'Editor'
-    })
-  }
-  // 确认输入
-  const confirmGithubTokenValueInput = () => {
-    let trimValue = githubTokenValue.value
-    if (!trimValue) {
-      ElMessage.warning('请输入token')
-      return
-    }
-    store.dispatch('saveGithubToken', trimValue)
-    githubTokenInputDialogVisible.value = false
-    githubTokenValue.value = ''
-    if (route.name === 'Editor' && !!route.query.data) {
-      router.replace({
-        name: 'Editor'
-      })
-    }
-  }
-  // 取消输入
-  const cancelGithubTokenValueInput = () => {
-    githubTokenInputDialogVisible.value = false
-    githubTokenValue.value = ''
-  }
-  return {
-    githubTokenInputDialogVisible,
-    githubTokenValue,
-    githubToken,
-    confirmGithubTokenValueInput,
-    cancelGithubTokenValueInput,
-    login,
-    logout
   }
 }
 

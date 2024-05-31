@@ -68,27 +68,20 @@
 </template>
 
 <script setup>
-import {
-  ref,
-  defineProps,
-  onMounted,
-  computed,
-  getCurrentInstance,
-  watch,
-  onUnmounted
-} from 'vue'
-import { useStore } from 'vuex'
+import CodeToImg from '@/components/CodeToImg.vue'
 import EditorItem from '@/components/EditorItem.vue'
+import {base} from '@/config'
+import {codeThemeList} from '@/config/codeThemeList'
+import {preprocessorListMap} from '@/config/constants'
+import {useInitEditorList} from "@/hooks/useInitEditorList.js";
+import {ElMessage} from 'element-plus'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import {computed, defineProps, getCurrentInstance, onMounted, onUnmounted, ref, watch} from 'vue'
+import {useStore} from 'vuex'
 import Drag from './Drag.vue'
 import DragItem from './DragItem.vue'
-import { defaultEditorMap, preprocessorListMap } from '@/config/constants'
-import { ElMessage } from 'element-plus'
-import { codeThemeList } from '@/config/codeThemeList'
-import { base } from '@/config'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-import CodeToImg from '@/components/CodeToImg.vue'
-import EditImportMap from './EditImportMap.vue'
 import EditAssets from './EditAssets.vue'
+import EditImportMap from './EditImportMap.vue'
 
 // props
 const props = defineProps({
@@ -136,64 +129,6 @@ const useInit = () => {
     editData: computed(() => store.state.editData), // 数据
     codeTheme: computed(() => store.state.editData.config.codeTheme), // 代码主题
     codeFontSize: computed(() => store.state.editData.config.codeFontSize) // 代码字号
-  }
-}
-
-// 初始化编辑器列表
-const useInitEditorList = ({ props, editData }) => {
-  let show = ref(false)
-  // 编辑器列表
-  let editorItemList = ref([])
-
-  // 初始化编辑器列表数据
-  const initEditorItemList = () => {
-    editorItemList = ref(
-      props.showList.map(item => {
-        if (typeof item === 'string') {
-          return {
-            ...defaultEditorMap[item],
-            showTitle: false
-          }
-        } else {
-          return {
-            ...defaultEditorMap[item.title],
-            ...item,
-            showTitle: false
-          }
-        }
-      })
-    )
-  }
-  initEditorItemList()
-
-  // 数据变化后重新初始化
-  watch(
-    () => {
-      return props.showList
-    },
-    initEditorItemList,
-    {
-      deep: true
-    }
-  )
-
-  // 设置编辑器列表初始数据
-  const setInitData = () => {
-    const code = editData.value.code
-    Object.keys(code).forEach(type => {
-      let index = getIndexByType(type)
-      if (index === -1) {
-        return
-      }
-      editorItemList.value[index].content = code[type].content
-      editorItemList.value[index].language = code[type].language
-    })
-  }
-
-  return {
-    show,
-    editorItemList,
-    setInitData
   }
 }
 
@@ -400,7 +335,7 @@ const { show, editorItemList, setInitData } = useInitEditorList({
 const { loadTheme, getThemeData } = useTheme({ codeTheme, proxy })
 const { runCode } = useRunCode({ store, proxy })
 const { autoRun } = useAutoRun({ store, runCode })
-const { getIndexByType, preprocessorChange, codeChange } = useEditorChange({
+const { preprocessorChange, codeChange } = useEditorChange({
   setInitData,
   store,
   editorItemList,

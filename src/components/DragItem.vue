@@ -24,16 +24,9 @@
 </template>
 
 <script setup>
-import {
-  defineProps,
-  onBeforeUnmount,
-  watch,
-  inject,
-  getCurrentInstance,
-  defineEmits,
-  computed
-} from 'vue'
+import {useSizeList} from "@/hooks/useSizeList.js";
 import Drag from '@/utils/Drag.js'
+import {computed, defineEmits, defineProps, getCurrentInstance, inject, onBeforeUnmount} from 'vue'
 
 // props
 const props = defineProps({
@@ -87,31 +80,6 @@ const useInit = ({ props }) => {
   }
 }
 
-// 尺寸列表处理
-const useSizeList = ({ emit }) => {
-  const sizeList = inject('sizeList')
-
-  watch(
-    [
-      () => {
-        return sizeList.value.length > 0 ? sizeList.value[props.index].width : 0
-      },
-      () => {
-        return sizeList.value.length > 0
-          ? sizeList.value[props.index].height
-          : 0
-      }
-    ],
-    () => {
-      emit('size-change')
-    }
-  )
-
-  return {
-    sizeList
-  }
-}
-
 // 拖动处理
 const useDrag = ({ props }) => {
   const { proxy } = getCurrentInstance()
@@ -151,7 +119,7 @@ const useDrag = ({ props }) => {
 
 // created部分
 const { dir, titleStr } = useInit({ props })
-const { sizeList } = useSizeList({ emit })
+const { sizeList } = useSizeList({ emit },props)
 const { onMousedown } = useDrag({ props })
 </script>
 
